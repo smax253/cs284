@@ -31,7 +31,7 @@ public class BinaryNumber {
 		return data.length;
 	}
 	public int getDigit(int index) {
-		if(index>0 && index<data.length-1)
+		if(index>=0 && index<data.length)
 			return data[index];
 		else
 			return -1;
@@ -40,14 +40,27 @@ public class BinaryNumber {
 		
 	}
 	public void add(BinaryNumber aBinaryNumber) {
-		
+		if (this.getLength() != aBinaryNumber.getLength()) System.out.println("Number length does not match.");
+		else {
+			int length = this.getLength();
+			int carry = 0;
+			for(int i = 0; i<length; i++) {
+				int sum = getDigit(i)+aBinaryNumber.getDigit(i)+carry;
+				aBinaryNumber.data[i] = sum%2;
+				carry = sum/2;
+			}
+			if (carry==1) overflow = true; 
+		}
 	}
 	public String toString() {
+		if(overflow) return "Overflow";
+		
 		String s = "";
 		for(int digit:data) {
 			s += digit;
 		}
 		return s;
+		
 	}
 	public int toDecimal() {
 		int number = 0;
@@ -58,5 +71,12 @@ public class BinaryNumber {
 	}
 	public void clearOverflow() {
 		overflow = false;
+	}
+	public static void main(String[] args) {
+		BinaryNumber b1 = new BinaryNumber("01101");
+		BinaryNumber b2 = new BinaryNumber("11000");
+		b1.add(b2);
+		System.out.println(b2);
+		System.out.println(b2.toDecimal());
 	}
 }
