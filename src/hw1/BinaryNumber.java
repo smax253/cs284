@@ -41,6 +41,11 @@ public class BinaryNumber {
 	public int getLength() {
 		return data.length;
 	}
+	/**
+	 * Returns the bit at the given index
+	 * @param index The requested index in the data of bits, must be greater than 0 and less than length-1
+	 * @return The bit at the given index
+	 */
 	public int getDigit(int index) {
 		if(index>=0 && index<data.length)
 			return data[index];
