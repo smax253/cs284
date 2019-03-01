@@ -38,6 +38,7 @@ public class IDLList<E> {
         head = null;
         tail = null;
         size = 0;
+        indices = new ArrayList<Node<E>>();
     }
     /**
      * Adds an element to the front of the list
@@ -50,8 +51,7 @@ public class IDLList<E> {
             tail = head;
 
         }else{
-
-            head = new Node<E>(elem, null, head);;
+            head = new Node<E>(elem, null, head);
         }
         size++;
         indices.add(0,head);
@@ -183,6 +183,7 @@ public class IDLList<E> {
         Node<E> current = head;
         while(current != null){
             s.append(current.data+",");
+            current = current.next;
         }
         s.setLength(s.length()-1);
         s.append("]");
