@@ -1,8 +1,8 @@
 package cs284;
 
 public class ParenChecker {
-	private static final String OPEN = "([{";
-	private static final String CLOSE = ")]}";
+	private static final String OPEN = "([{<";
+	private static final String CLOSE = ")]}>";
 	public static boolean isBalanced(String exp) {
 		StackSLL<Character> s = new StackSLL<>();
 		for(int i = 0; i<exp.length(); i++) {
@@ -17,7 +17,7 @@ public class ParenChecker {
 				}
 			}
 		}
-		return s.size()==0;
+		return s.empty();
 	}
 	private static boolean isOpen(char ch) {
 		return OPEN.indexOf(ch)>-1;

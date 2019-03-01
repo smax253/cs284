@@ -179,6 +179,19 @@ public class SingleLL<E> {
 	//    public void reverse() {
 	//
 	//    }
+	public void reverse() {
+		if (head == null || head.next == null) return;
+		Node<E> current = head;
+		Node<E> next = head.next;
+		head.next = null;
+		while(next!=null) {
+			Node<E> temp = next.next;
+			next.next = current;
+			current = next;
+			next = temp;
+		}
+		head = current;
+	}
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append("[");
@@ -192,28 +205,46 @@ public class SingleLL<E> {
 	}
 	public static void main(String[] args) {
 		SingleLL<Integer> l = new SingleLL<Integer>();
-		l.addFirst(3);
-		l.addFirst(2);
-		l.addFirst(1);
-		l.addLast(4);
+		for(int i = 0; i<20;i++) {
+			l.addLast(i);
+		}
 		System.out.println(l);
-		l.removeFirst();
+		l.reverse();
 		System.out.println(l);
-		System.out.println("Take examples");
-		System.out.println(l.take(10));
-		System.out.println(l.take(0));
-		System.out.println(l.take(1));
-		System.out.println(l.take(2));
-		System.out.println("Take2 examples");
-		System.out.println(l.take2(10));
-		System.out.println(l.take2(0));
-		System.out.println(l.take2(1));
-		System.out.println(l.take2(2));
-		System.out.println("Take3 examples");
-		l.take3(10);
+		l = new SingleLL<>();
 		System.out.println(l);
-		l.take3(2);
+		l.reverse();
 		System.out.println(l);
+		l.addLast(1);
+		System.out.println(l);
+		l.reverse();
+		System.out.println(l);
+		l.addLast(2);
+		System.out.println(l);
+		l.reverse();
+		System.out.println(l);
+//		l.addFirst(3);
+//		l.addFirst(2);
+//		l.addFirst(1);
+//		l.addLast(4);
+//		System.out.println(l);
+//		l.removeFirst();
+//		System.out.println(l);
+//		System.out.println("Take examples");
+//		System.out.println(l.take(10));
+//		System.out.println(l.take(0));
+//		System.out.println(l.take(1));
+//		System.out.println(l.take(2));
+//		System.out.println("Take2 examples");
+//		System.out.println(l.take2(10));
+//		System.out.println(l.take2(0));
+//		System.out.println(l.take2(1));
+//		System.out.println(l.take2(2));
+//		System.out.println("Take3 examples");
+//		l.take3(10);
+//		System.out.println(l);
+//		l.take3(2);
+//		System.out.println(l);
 		//         System.out.println(l.member(4));
 		//         System.out.println(l.member(7));
 	}
