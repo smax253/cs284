@@ -1,5 +1,6 @@
 
 package cs284;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 public class StackSLL<E>  {
 	// Data fields
@@ -34,13 +35,29 @@ public class StackSLL<E>  {
 	public String toString() {
 		return stack.toString();
 	}
-	public static void main(String[] args) {
-		StackSLL<Integer> s = new StackSLL<Integer>();
-		for (int i=0; i<10; i++) {
-			s.push(i);
+	public static ArrayList<Integer> toBinary(int i){
+		StackSLL<Integer> stack = new StackSLL<>();
+		int power = 0;
+		while(Math.pow(2, power+1)<=i) {
+			power++;
 		}
-		System.out.println(s);
-		s.pop();
-		System.out.println(s);
+		for(int index = 0; index<=power; index++) {
+			if(Math.pow(2, power-index)<=i) {
+				stack.push(1);
+				i-=Math.pow(2,power-index);
+			}
+			else {
+				stack.push(0);
+			}
+		}
+		ArrayList<Integer> binary = new ArrayList<>();
+		while(!stack.empty()) {
+			binary.add(0,stack.pop());
+		}
+		return binary;
+	}
+	public static void main(String[] args) {
+		System.out.println(toBinary(20));
+		
 	}
 }

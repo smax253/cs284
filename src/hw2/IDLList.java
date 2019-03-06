@@ -52,6 +52,7 @@ public class IDLList<E> {
 
         }else{
             head = new Node<E>(elem, null, head);
+            head.next.prev= head;
         }
         size++;
         indices.add(0,head);
@@ -70,6 +71,7 @@ public class IDLList<E> {
         Node<E> next = indices.get(index);
         Node<E> prev = next.prev;
         next.prev = new Node<E>(elem, prev, next);
+        System.out.println(next.prev);
         prev.next = next.prev;
         indices.add(index, next.prev);
         return true;
@@ -81,6 +83,7 @@ public class IDLList<E> {
         if(size == 0) add(elem);
         else{
             tail = new Node<E>(elem,tail, null);
+            tail.prev.next = tail;
             size++;
             indices.add(tail);
         }
@@ -189,6 +192,7 @@ public class IDLList<E> {
         s.append("]");
         return s.toString();
     }
+    /*
     public static void main(String[] args){
         ArrayList<Integer> test = new ArrayList<Integer>();
         for (int i = 0; i<5; i++){
@@ -198,4 +202,5 @@ public class IDLList<E> {
         test.remove(3);
         System.out.println(test);
     }
+    */
 }

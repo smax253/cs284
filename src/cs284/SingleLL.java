@@ -157,6 +157,65 @@ public class SingleLL<E> {
 			size = i;
 		}
 	}
+	class Pair<G,H>{
+		private final G itemOne;
+		private final H itemTwo;
+		Pair(G first, H second){
+			itemOne = first;
+			itemTwo = second;
+		}
+		public G getFirst(){
+			return itemOne;
+		}
+		public H getSecond() {
+			return itemTwo;
+		}
+		public String toString() {
+			return ("("+itemOne+","+itemTwo+")");
+		}
+	}
+	public <F> SingleLL<Pair<E,F>> mergeLists(SingleLL<F> l){
+		SingleLL<Pair<E,F>> result = new SingleLL<>();
+		Node<E> currentOne = this.head;
+		SingleLL<F>.Node<F> currentTwo = l.head;
+		for(int i = 0; i<this.size && i<l.size; i++) {
+			result.addFirst(new Pair<E,F>(currentOne.data, currentTwo.data));
+			currentOne = currentOne.next;
+			currentTwo = currentTwo.next;
+		}
+		result.reverse();
+		return result;
+	}
+	public SingleLL<Pair<E,Integer>> compress(){
+		SingleLL<Pair<E,Integer>> result = new SingleLL<>();
+		Node<E> current = head;
+		int counter = 1;
+		while(current!=null) {
+			if(current.next!=null && current.data.equals(current.next.data)) counter++;
+			else {
+				result.addFirst(new Pair<E, Integer>(current.data, counter));
+				counter = 1;
+			}
+			current = current.next;
+		}
+		result.reverse();
+		return result;
+	}
+	public boolean hasCycle() {
+		Node<E> slow = head;
+		Node<E> fast = head;
+		do {
+			//System.out.println(fast.data+" : "+slow.data);
+			if(fast!=null&&fast.next!=null) fast= fast.next.next;
+			else if(fast!=null) fast = fast.next;
+			slow = slow.next;
+		}
+		while(slow!=null && slow!=fast); 
+		//System.out.println(fast.data+" : "+slow.data);
+		return slow!=null;
+		
+	}
+	
 	//
 	//
 	//    public SingleLL<E> drop(int n) {
@@ -204,49 +263,39 @@ public class SingleLL<E> {
 		return s.toString();
 	}
 	public static void main(String[] args) {
-		SingleLL<Integer> l = new SingleLL<Integer>();
-		for(int i = 0; i<20;i++) {
-			l.addLast(i);
+	//  build a list
+		SingleLL <Integer > l = new  SingleLL <Integer >();
+		for (int i=0;i<10;i++) {
+		l.addLast(i);
 		}
-		System.out.println(l);
+		//  create a loop
+		//l.head.next.next.next.next = l.head;
+		// test  your  code
+		System.out.println(l.hasCycle());
+		int[] entries = {4,4,4,2,3,3,2,2,2,1,1};
+		SingleLL<Integer> compressTest = new SingleLL<>();
+		for(int i:entries) {
+			compressTest.addLast(i);
+		}
+		compressTest.addLast(9);
+		System.out.println(compressTest.compress());
+		System.out.println(compressTest.mergeLists(l));
+		String[] entries2 = {"hi","there","this","is","a","test"};
+		SingleLL<String> compress2 = new SingleLL<>();
+		for(String s:entries2) {
+			compress2.addLast(s);
+		}
+		System.out.println(compress2.mergeLists(l));
+		l= new SingleLL<>();
+		compressTest = new SingleLL<>();
+		for(int i = 0; i<100000; i++){
+			l.addFirst(i);
+			compressTest.addFirst(i);
+		}
 		l.reverse();
-		System.out.println(l);
-		l = new SingleLL<>();
-		System.out.println(l);
-		l.reverse();
-		System.out.println(l);
-		l.addLast(1);
-		System.out.println(l);
-		l.reverse();
-		System.out.println(l);
-		l.addLast(2);
-		System.out.println(l);
-		l.reverse();
-		System.out.println(l);
-//		l.addFirst(3);
-//		l.addFirst(2);
-//		l.addFirst(1);
-//		l.addLast(4);
-//		System.out.println(l);
-//		l.removeFirst();
-//		System.out.println(l);
-//		System.out.println("Take examples");
-//		System.out.println(l.take(10));
-//		System.out.println(l.take(0));
-//		System.out.println(l.take(1));
-//		System.out.println(l.take(2));
-//		System.out.println("Take2 examples");
-//		System.out.println(l.take2(10));
-//		System.out.println(l.take2(0));
-//		System.out.println(l.take2(1));
-//		System.out.println(l.take2(2));
-//		System.out.println("Take3 examples");
-//		l.take3(10);
-//		System.out.println(l);
-//		l.take3(2);
-//		System.out.println(l);
-		//         System.out.println(l.member(4));
-		//         System.out.println(l.member(7));
+		compressTest.reverse();
+		System.out.println(l.toString().substring(0,100));
+		System.out.println(l.mergeLists(compressTest));
 	}
 	public int size() {
 		// TODO Auto-generated method stub
