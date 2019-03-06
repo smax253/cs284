@@ -65,29 +65,30 @@ public class IDLList<E> {
      * @return true if insertion succeeded
      */
     public boolean add(int index, E elem){
-        if(index<0 || index>=size) throw new IndexOutOfBoundsException();
-        else if(index == 0) add(elem);
-        else if(index == size-1) append(elem);
-        Node<E> next = indices.get(index);
+        if(index<0 || index>size) throw new IndexOutOfBoundsException();
+        else if(index == 0) return add(elem);
+        else if(index == size) return append(elem);
+    	Node<E> next = indices.get(index);
         Node<E> prev = next.prev;
         next.prev = new Node<E>(elem, prev, next);
-        System.out.println(next.prev);
         prev.next = next.prev;
         indices.add(index, next.prev);
+        size++;
         return true;
+        
     }
     /**
      * Adds an element to the back of the list
      */
     public boolean append(E elem){
-        if(size == 0) add(elem);
+        if(size == 0) return add(elem);
         else{
             tail = new Node<E>(elem,tail, null);
             tail.prev.next = tail;
             size++;
             indices.add(tail);
+            return true;
         }
-        return true;
     }
     /**
      * Gets the data of the node at the given index
@@ -124,6 +125,7 @@ public class IDLList<E> {
         Node<E> temp = head;
         if(head.next!=null){
             head = head.next;
+            head.prev = null;
         }
         else{
             head = null;
@@ -142,7 +144,9 @@ public class IDLList<E> {
         else{
             Node<E> temp = tail;
             tail = tail.prev;
+            tail.next = null;
             indices.remove(indices.size()-1);
+            size--;
             return temp.data;
         }
     }
@@ -156,10 +160,12 @@ public class IDLList<E> {
         else if (index == size-1) return removeLast();
         else{
             Node<E> temp = indices.get(index);
-            temp.prev = temp.next;
-            temp.next = temp.prev;
+            temp.prev.next = temp.next;
+            temp.next.prev = temp.prev;
             indices.remove(index);
+            size--;
             return temp.data;
+            
         }
     }
     /**
@@ -169,13 +175,19 @@ public class IDLList<E> {
     public boolean remove(E elem){
         Node<E> temp = head;
         boolean found = false;
+        int index = 0;
         while(temp != null && !found){
             if (temp.data.equals(elem)) found=true;
-            else temp = temp.next;
+            else {
+            	index++;
+            	temp = temp.next;
+            }
         }
-        if(temp != null) this.removeAt(indices.indexOf(temp));
+        if(found) {
+        	return elem.equals(this.removeAt(indices.indexOf(temp)));
+        }
         else return false;
-        return true;
+        
     }
     /**
      * Returns a string representation of the list
@@ -185,22 +197,12 @@ public class IDLList<E> {
         s.append("[");
         Node<E> current = head;
         while(current != null){
-            s.append(current.data+",");
+            s.append(current.data.toString()+",");
             current = current.next;
         }
-        s.setLength(s.length()-1);
+        if(s.length()>2) s.setLength(s.length()-1);
         s.append("]");
         return s.toString();
     }
-    /*
-    public static void main(String[] args){
-        ArrayList<Integer> test = new ArrayList<Integer>();
-        for (int i = 0; i<5; i++){
-            test.add(i);
-        }
-        System.out.println(test);
-        test.remove(3);
-        System.out.println(test);
-    }
-    */
+    
 }
