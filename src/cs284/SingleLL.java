@@ -53,6 +53,44 @@ public class SingleLL<E> {
 			size++;
 		}
 	}
+	private void addLast_rhelper(Node<E> current, E item) {
+		if(current.next == null) {
+			current.next = new Node<E>(item);
+		}
+		else {
+			addLast_rhelper(current.next, item);
+		}
+	}
+	public void addLast_r(E item) {
+		if(head == null) {
+			head = new Node<E>(item);
+		}
+		else addLast_rhelper(head, item);
+		size++;
+	}
+	public E removeLast_rhelper(Node<E> current) {
+		if(current.next.next == null) {
+			E temp = current.next.data;
+			current.next = null;
+			return temp;
+			
+		}else return removeLast_rhelper(current.next);
+	}
+	public E removeLast_r() {
+		if(head==null) {
+			throw new IllegalStateException();
+		}
+		if(head.next == null) {
+			E temp = head.data;
+			head = null;
+			size--;
+			return temp;
+		}
+		else {
+			size--;
+			return removeLast_rhelper(head);
+		}
+	}
 	public E get(int index) {
 		if (index<0 || index>size-1) {
 			throw new IllegalArgumentException();
@@ -266,36 +304,13 @@ public class SingleLL<E> {
 	//  build a list
 		SingleLL <Integer > l = new  SingleLL <Integer >();
 		for (int i=0;i<10;i++) {
-		l.addLast(i);
+			l.addLast_r(i);
 		}
-		//  create a loop
-		//l.head.next.next.next.next = l.head;
-		// test  your  code
-		System.out.println(l.hasCycle());
-		int[] entries = {4,4,4,2,3,3,2,2,2,1,1};
-		SingleLL<Integer> compressTest = new SingleLL<>();
-		for(int i:entries) {
-			compressTest.addLast(i);
+		System.out.println(l);
+		while(!l.isEmpty()) {
+		l.removeLast_r();
+		System.out.println(l);
 		}
-		compressTest.addLast(9);
-		System.out.println(compressTest.compress());
-		System.out.println(compressTest.mergeLists(l));
-		String[] entries2 = {"hi","there","this","is","a","test"};
-		SingleLL<String> compress2 = new SingleLL<>();
-		for(String s:entries2) {
-			compress2.addLast(s);
-		}
-		System.out.println(compress2.mergeLists(l));
-		l= new SingleLL<>();
-		compressTest = new SingleLL<>();
-		for(int i = 0; i<100000; i++){
-			l.addFirst(i);
-			compressTest.addFirst(i);
-		}
-		l.reverse();
-		compressTest.reverse();
-		System.out.println(l.toString().substring(0,100));
-		System.out.println(l.mergeLists(compressTest));
 	}
 	public int size() {
 		// TODO Auto-generated method stub
