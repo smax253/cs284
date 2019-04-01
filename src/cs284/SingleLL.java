@@ -68,7 +68,7 @@ public class SingleLL<E> {
 		else addLast_rhelper(head, item);
 		size++;
 	}
-	public E removeLast_rhelper(Node<E> current) {
+	private E removeLast_rhelper(Node<E> current) {
 		if(current.next.next == null) {
 			E temp = current.next.data;
 			current.next = null;
