@@ -1,5 +1,9 @@
 package hw3;
 
+/**
+ * Class to represent a pair of Integers
+ * @author Max Shi
+ */
 public class PairInt{
 	private int x;
 	private int y;
@@ -20,7 +24,7 @@ public class PairInt{
 		this.y = y;
 	}
 	public boolean equals(Object p){
-		return p.toString() == this.toString();
+		return p.toString().equals(this.toString());
 	}
 	public String toString() {
 		return "("+x+","+y+")";
