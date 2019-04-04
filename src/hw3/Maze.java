@@ -1,7 +1,6 @@
 package hw3;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -85,28 +84,30 @@ public class Maze implements GridColors {
      * @param result The ArrayList of possible paths
      * @param trace The stack representing the path currently being explored
      */
-    private void findMazePathStackBased(int x, int y, ArrayList<ArrayList<PairInt>> result, Stack<PairInt> trace) {
+	private void findMazePathStackBased(int x, int y, ArrayList<ArrayList<PairInt>> result, Stack<PairInt> trace) {
         trace.push(new PairInt(x,y));  //add current point to stack
         if(!inMaze(x,y) || maze.getColor(x, y)!=NON_BACKGROUND) trace.pop();  //remove current point if not valid
         else if(x==maze.getNCols()-1 && y == maze.getNRows()-1) {  //check if point is goal
         	//add path to list of possible paths
             ArrayList<PairInt> newList = new ArrayList<>();
             newList.addAll(trace);
+            trace.pop();
             result.add(newList);
         }else {
             maze.recolor(x, y, PATH);	//prevent visiting already visited point
 			//visit neighbors
-            findMazePathStackBased(x+1, y, result, (Stack<PairInt>) trace.clone());
-            findMazePathStackBased(x-1, y, result, (Stack<PairInt>) trace.clone());
-            findMazePathStackBased(x, y+1, result, (Stack<PairInt>) trace.clone());
-            findMazePathStackBased(x, y-1, result, (Stack<PairInt>) trace.clone());
+            findMazePathStackBased(x+1, y, result,  trace);
+            findMazePathStackBased(x-1, y, result,  trace);
+            findMazePathStackBased(x, y+1, result, trace);
+            findMazePathStackBased(x, y-1, result, trace);
+            trace.pop();
             maze.recolor(x, y, NON_BACKGROUND);	//restore color
         }
     }
 
     /**
      * Finds all paths in the maze from the given start coordinates to the bottom right corner of the maze,
-     * the point with coordinates width-1, height-1.
+     * the point with coordinates (width-1, height-1).
      * @param x The x-coordinate to start from
      * @param y	The y-coordinate to start from
      * @return The ArrayList of ArrayList of PairInts representing the different paths in PairInt coordinates on the path to the end
@@ -121,7 +122,7 @@ public class Maze implements GridColors {
 
     /**
      * Returns the ArrayList of PairInts representing the shortest path from given x and y to the bottom right corner, the point
-     * at width-1, height-1.
+     * at (width-1, height-1).
      * @param x The x-coordinate to start from
      * @param y The y-coordinate to start from
      * @return The ArrayList of PairInts representing the shortest path

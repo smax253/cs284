@@ -113,8 +113,8 @@ public class MazeTest extends JFrame implements GridColors {
         JOptionPane.showMessageDialog(null, results);
 
         //Uncomment this to test findMazePathMin
-        ArrayList<PairInt> path = m.findMazePathMin(0, 0);
-        JOptionPane.showMessageDialog(null,  path);
+        //ArrayList<PairInt> path = m.findMazePathMin(0, 0);
+        //JOptionPane.showMessageDialog(null,  path);
 
 
 
