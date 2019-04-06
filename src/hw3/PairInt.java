@@ -24,7 +24,14 @@ public class PairInt{
 		this.y = y;
 	}
 	public boolean equals(Object p){
-		return p.toString().equals(this.toString());
+		PairInt other = null;
+		try {
+			other = (PairInt) p;
+		}catch(Exception e) {
+			return false;
+		}
+		if(other == null) return false;
+		return x==other.getX() && y==other.getY();
 	}
 	public String toString() {
 		return "("+x+","+y+")";
@@ -32,4 +39,5 @@ public class PairInt{
 	public PairInt copy() {
 		return new PairInt(x, y);
 	}
+	
 }
