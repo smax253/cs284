@@ -4,6 +4,27 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Treap<E extends Comparable<E>> {
+	private class Pair<F,G>{
+		private F first;
+		private G second;
+		public Pair(F a, G b) {
+			first = a;
+			second = b;
+		}
+		public F getFirst() {
+			return first;
+		}
+		public G getSecond() {
+			return second;
+		}
+		public void setFirst(F a) {
+			first = a;
+		}
+		public void setSecond(G b) {
+			second = b;
+		}
+	}
+	
     private class Node<F> {
         public F data;
         public int priority;
@@ -106,17 +127,51 @@ public class Treap<E extends Comparable<E>> {
     public boolean delete(E key){
         Node<E> prev = null;
         Node<E> current = root;
+        boolean dir = false;
         while(current != null && !key.equals(current.data)){
             prev = current;
-            if (key.compareTo(current.data)>0) current = current.right;
-            else if(key.compareTo(current.data)<0 ) current = current.left;
+            if (key.compareTo(current.data)>0) {
+            	current = current.right;
+            	dir = true;
+            }
+            else if(key.compareTo(current.data)<0 ) {
+            	current = current.left;
+            	dir = false;
+            }
         }
+        System.out.println("found");
         if(current==null) return false;
-        else if(current == root){
-
-        }else{
-
+        while(current.left != null && current.right != null) {
+        	if(prev == null) prev = root;
+    		boolean rotateDir = false;
+    		if(current.right == null) {
+    			rotateDir = true;
+    		}else if(current.left == null) rotateDir = false;
+    		else if(current.right.priority<current.left.priority) rotateDir = false;
+    		else rotateDir = true;
+    		if(rotateDir) {
+    			if (dir) {
+    				prev.right = current.rotateRight();
+    				current = prev.right;
+    			}else {
+    				prev.left = current.rotateRight();
+    				current = prev.left;
+    			}
+    		}else {
+    			if (dir) {
+    				prev.right = current.rotateLeft();
+    				current = prev.right;
+    			}else {
+    				prev.left = current.rotateLeft();
+    				current = prev.left;
+    			}
+    		} 
+    		System.out.println(current.data);
         }
+        if(dir) prev.right = null;
+        else prev.left = null;
+        return true;
+        
     }
     private boolean find(Node<E> root, E key){
         return false;
@@ -163,6 +218,8 @@ public class Treap<E extends Comparable<E>> {
         testTree.add (3 ,12);
         testTree.add (5 ,83);
         testTree.add (7 ,26);
+        System.out.println(testTree.toString());
+        testTree.delete(5);
         System.out.println(testTree.toString());
 //        treap.add(6);
 //        treap.add(7);
