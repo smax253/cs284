@@ -20,6 +20,10 @@ class TreapTest {
         assertTrue(testTree.find(6));
         assertFalse(testTree.find(100));
         assertFalse(testTree.find(5));
+
+        assertTrue(testTree.delete(1));
+        System.out.println(testTree);
+        assertTrue(testTree.find(6));
     }
 
     @Test

@@ -196,8 +196,15 @@ public class Treap<E extends Comparable<E>> {
             }
         }
         if (current == null) return false;
+        else if(current == root && (current.right != null || current.left != null)){
+            root = makeRotation(current);
+            if(root.left == null) root = root.rotateLeft();
+            else if (root.right == null || root.left.priority>root.right.priority) root = root.rotateRight();
+            else root = root.rotateLeft();
+            System.out.println(this.toString());
+            return this.delete(key);
+        }
         while (current != null && (current.left != null || current.right != null)) {
-            if (prev == null) prev = root;
             boolean rotateDir = false;
             if (current.right == null) rotateDir = true;
             else if (current.left == null) rotateDir = false;
