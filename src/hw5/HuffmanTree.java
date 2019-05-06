@@ -1,9 +1,6 @@
 package hw5;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.lang.reflect.Array;
 import java.util.*;
 /*
 *  Instructions:
@@ -199,6 +196,7 @@ public class HuffmanTree {
         Node current = root;
         for (int i = 0; i<coding.length; i++){
             if (current == null) throw new IllegalArgumentException();
+            if (root instanceof LeafNode && coding[i]) throw new IllegalArgumentException();
             else if(current instanceof InternalNode){
                 InternalNode temp = (InternalNode) current;
                 current = coding[i] ? temp.right : temp.left;
@@ -233,9 +231,13 @@ public class HuffmanTree {
         ArrayList<Boolean> bools = new ArrayList<>();
         ArrayList<Boolean> currentChar = new ArrayList<>();
         for(int i = 0; i<inputText.length(); i++){
-            lookup(root, inputText.charAt(i), currentChar, new Stack<Boolean>());
-            bools.addAll(currentChar);
-            currentChar.clear();
+        	if (root instanceof LeafNode && ((LeafNode)root).data == inputText.charAt(i)) bools.add(false);
+        	else{
+	        	lookup(root, inputText.charAt(i), currentChar, new Stack<Boolean>());
+	            if (currentChar.size()==0) throw new IllegalArgumentException();
+	            bools.addAll(currentChar);
+	            currentChar.clear();
+        	}
         }
         Boolean[] result = new Boolean[0];
         return bools.toArray(result);
@@ -249,11 +251,15 @@ public class HuffmanTree {
             Character c = inputText.charAt(i);
             if(hash.containsKey(c)) bools.addAll(hash.get(c));
             else{
-                ArrayList<Boolean> currentChar = new ArrayList<>();
-                lookup(root, c, currentChar, new Stack<Boolean>());
-                bools.addAll(currentChar);
-                hash.put(c, currentChar);
-                currentChar.clear();
+            	if (root instanceof LeafNode && ((LeafNode)root).data == inputText.charAt(i)) bools.add(false);
+            	else {
+	            	ArrayList<Boolean> currentChar = new ArrayList<>(); 
+	                lookup(root, c, currentChar, new Stack<Boolean>());
+	                if (currentChar.size() == 0) throw new IllegalArgumentException();
+	                bools.addAll(currentChar);
+	                hash.put(c, currentChar);
+	                currentChar.clear();
+            	}
             }
         }
         Boolean[] result = new Boolean[0];
@@ -262,14 +268,14 @@ public class HuffmanTree {
 
     public static void main(String[] args) {
 // Code to see if stuff works...
-        String s = "Some string you want to encode";
+        String s = "s";
         HuffmanTree t = new HuffmanTree(s); // Creates specific Huffman Tree for "s"
-        Boolean[] bools = {false, true, false, false, false, true, true, false, false, true, false, true, false, true, false, true, true, true, true, false, true, false};
+        Boolean[] bools = {false, false};
         System.out.println(t.bitsToString(bools));
         System.out.println(t.toString());
         System.out.println(t.decode(bools));
-        System.out.println(Arrays.toString(t.encode("encode")));
-        Boolean[] encode = t.efficientEncode("string");
+        System.out.println(Arrays.toString(t.encode("ssss")));
+        Boolean[] encode = t.efficientEncode("ssss");
         System.out.println(Arrays.toString(encode));
         System.out.println(t.decode(encode));
 
