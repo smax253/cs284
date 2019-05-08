@@ -1,5 +1,11 @@
 package cs284;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class BTree<E> {
 
 	class Node<F> {
@@ -54,8 +60,10 @@ public class BTree<E> {
 			s.append("null\n");
 		} else {
 			s.append(current.data.toString()+"\n");
-			s.append(toString(l+1,current.left));
+
+
 			s.append(toString(l+1,current.right));
+			s.append(toString(l+1,current.left));
 		}
 		return s.toString();
 		
@@ -115,6 +123,54 @@ public class BTree<E> {
 			return current;
 		}
 	}
+	public ArrayList<ArrayList<Integer>> paths(Node<E> localroot){
+		ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+		ArrayList<Integer> currentpath = new ArrayList<>();
+		result.add(currentpath);
+
+		if(localroot.left != null) {
+			ArrayList<ArrayList<Integer>> left = paths(localroot.left);
+			left.forEach((n)->n.add(0,1));
+			result.addAll(left);
+		}
+		if(localroot.right != null){
+			ArrayList<ArrayList<Integer>> right = paths(localroot.right);
+			right.forEach((n)->n.add(0,0));
+			result.addAll(right);
+		}
+		return result;
+	}
+
+	public ArrayList<E> leveltraversal(){
+		ArrayList<E> result = new ArrayList<>();
+		Stack<Node<E>> level = new Stack<>();
+		Stack<Node<E>> nextLevel = new Stack<>();
+		level.add(root);
+		while(!level.isEmpty()){
+			Node<E> current = level.pop();
+			result.add(current.data);
+			if(current.left != null) nextLevel.add(current.left);
+			if(current.right != null) nextLevel.add(current.right);
+			if(level.isEmpty()){
+				level.addAll(nextLevel);
+				nextLevel.clear();
+			}
+		}
+		return result;
+	}
+	public ArrayList<E> leveltraversal2(){
+		ArrayList<E> result = new ArrayList<>();
+		LinkedList<Node<E>> list = new LinkedList<>();
+		list.add(root);
+		int levelsize = list.size();
+		for(int i = 0; i<levelsize; i++){
+			Node<E> current = list.removeLast();
+			result.add(current.data);
+			if(current.left != null) list.addFirst(current.left);
+			if(current.right != null) list.addFirst(current.right);
+		}
+		return result;
+	}
 	
 	public void clip(int l) {
 		root=clip(l,root);
@@ -126,15 +182,11 @@ public class BTree<E> {
 	public static void main(String[] args) {
 		BTree<Integer> leaf7 = new BTree<>(7);
 		BTree<Integer> leaf24 = new BTree<>(24);
-		BTree<Integer> t = new BTree<>(12,leaf7,new BTree<>(43,leaf24,new BTree<>()));
+		BTree<Integer> leaf51 = new BTree<>(51,new BTree<>(32), new BTree<>(90));
+		BTree<Integer> t = new BTree<>(12,leaf7,new BTree<>(43,leaf24,leaf51));
 	
 		System.out.println(t);
-		System.out.println(t.height());
-		t.mirror();
-		System.out.println(t);
-		System.out.println(t.no_of_nodes());
-		t.clip(0);
-		System.out.println(t);
+		System.out.println(t.paths(t.root).toString());
 	}
 	
 }
