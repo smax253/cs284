@@ -171,6 +171,12 @@ public class HuffmanTree {
 
     // ******************** End of Stub Code ******************** //
 // ********************************************************** //
+
+    /**
+     * Returns the string bit representation of 0s and 1s of the boolean array
+     * @param encoding The boolean array to be converted
+     * @return The string representation with 0s and 1s
+     */
     public String bitsToString(Boolean[] encoding) {
         StringBuilder s = new StringBuilder();
         for (Boolean b : encoding){
@@ -187,20 +193,36 @@ public class HuffmanTree {
         s.append(top.toString());
         if (top instanceof InternalNode) {
             InternalNode inter = (InternalNode) top;
+
             s.append(toStringHelper(inter.right, level+1));
             s.append(toStringHelper(inter.left, level+1));
         }
         return s.toString();
     }
+
+    /**
+     * Returns a string representation of the Huffman Tree
+     * @return The string representation of the Huffman Tree
+     */
     public String toString() {
         return toStringHelper(root, 0);
     }
 
+    /**
+     * Decodes the given boolean array with this Huffman Tree
+     * @param coding The encoded string in a boolean array
+     * @return The decoded string
+     * @throws IllegalArgumentException If the boolean array cannot be decoded with this Huffman Tree
+     */
     public String decode(Boolean[] coding) {
         StringBuilder s = new StringBuilder();
         Node current = root;
         for (int i = 0; i<coding.length; i++){
+
             if (current == null) throw new IllegalArgumentException();
+            else if (root instanceof LeafNode && coding[i]){
+                throw new IllegalArgumentException();
+            }
             else if(current instanceof InternalNode){
                 InternalNode temp = (InternalNode) current;
                 current = coding[i] ? temp.right : temp.left;
@@ -215,6 +237,11 @@ public class HuffmanTree {
     }
     private void lookup(Node current, char c, ArrayList<Boolean> result, Stack<Boolean> stack){
         if (current == null) return;
+        //if singleton tree then represent single character with false
+        else if (root instanceof LeafNode && ((LeafNode) root).data == c) {
+            result.add(false);
+            return;
+        }
         else if(current instanceof InternalNode){
             InternalNode temp = (InternalNode) current;
             stack.push(true);
@@ -231,11 +258,19 @@ public class HuffmanTree {
             }
         }
     }
+
+    /**
+     * A naive implenetation of encoding a String with this Huffman Tree
+     * @param inputText The string to be encoded
+     * @return The string encoded with a boolean array
+     * @throws IllegalArgumentException If the string contains characters not in this Huffman Tree
+     */
     public Boolean[] encode(String inputText) {
         ArrayList<Boolean> bools = new ArrayList<>();
         ArrayList<Boolean> currentChar = new ArrayList<>();
         for(int i = 0; i<inputText.length(); i++){
             lookup(root, inputText.charAt(i), currentChar, new Stack<Boolean>());
+            if (currentChar.size() == 0) throw new IllegalArgumentException();
             bools.addAll(currentChar);
             currentChar.clear();
         }
@@ -254,11 +289,20 @@ public class HuffmanTree {
             stack.pop();
         }
         else if (current instanceof LeafNode){
+            //if singleton tree then represent single character with false
+            if(current == root) stack.push(false);
             LeafNode temp = (LeafNode) current;
             ArrayList<Boolean> result = new ArrayList<>(stack);
             hash.put(temp.data, result);
         }
     }
+
+    /**
+     * Encodes the given String with this Huffman Tree, but only runs through the tree once
+     * @param inputText The string to be encoded
+     * @return The string encoded with a boolean array
+     * @throws IllegalArgumentException If the string contains characters not in this Huffman Tree
+     */
     public Boolean[] efficientEncode(String inputText) {
 // NOTE: Should only go through the tree once.
         ArrayList<Boolean> bools = new ArrayList<>();
