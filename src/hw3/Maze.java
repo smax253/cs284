@@ -53,7 +53,7 @@ public class Maze implements GridColors {
             return false;
         }
         else if(x==maze.getNCols()-1 && y == maze.getNRows()-1) {	//check if point is goal
-            maze.recolor(x, y, PATH);
+            maze.recolor(x, y, PATH, test variable whatever);
             return true;
         }
         else {	//point is in maze but not goal
