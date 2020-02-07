@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"hw2xu","l":"ListComparison"},{"p":"hw2xu","l":"SingleLinkedList.Node"},{"p":"hw2xu","l":"SkipList.Node"},{"p":"hw2xu","l":"SingleLinkedList"},{"p":"hw2xu","l":"SkipList"}]
