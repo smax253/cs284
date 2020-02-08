@@ -1,5 +1,4 @@
 package hw2xu;
-import java.util.Random;
 /**
  * SkipList class for Assignment 2.
  * <br>This is part 2 of the assignment, worth 50 points.
@@ -8,9 +7,18 @@ import java.util.Random;
  */
 public class SkipList {
 	/**
-	 * Maximum amount of levels in the SkipList
+	 * Maximum amount of nodes in the Skip List
 	 */
-	public static final int MAX_LEVEL = 7;
+	public static final int MAX_NODES = 1000;
+	/**
+	 * Number of nodes in the skip list
+	 */
+	private int numberOfNodes;
+	/**
+	 * Maximum level of the skiplist. <br>
+	 * This should be calculated as ceiling( log2(MAX_NODES) )
+	 */
+	private int maxLevel;
 	/**
 	 * Counter for visited nodes used in Part 3
 	 */
@@ -51,17 +59,19 @@ public class SkipList {
 	 * Use -1 for the value of the first head node as a placeholder.
 	 */
 	public SkipList() {
-		head = new Node(MAX_LEVEL, -40);
+		maxLevel = (int) Math.ceil(Math.log(MAX_NODES)/Math.log(2));
+		head = new Node(maxLevel, -40);
 		maxListLevel = 0;
 		visitedNodes = 0;
+		numberOfNodes = 0;
 	}
 	/**
 	 * Prints the contents of a specific level of the SkipList
 	 * @param level The level to be printed
-	 * @throws IllegalArgumentException - If level is not between 0 and MAX_LEVEL
+	 * @throws IllegalArgumentException - If level is not between 0 and maxLevel
 	 */
 	public void print(int level) {
-		if (level<0 || level>MAX_LEVEL) throw new IllegalArgumentException("Level must be between 0 and MAX_LEVEL");
+		if (level<0 || level> maxLevel) throw new IllegalArgumentException("Level must be between 0 and maxLevel");
 		StringBuilder s = new StringBuilder();
 		s.append(level+": ");
 		Node current = head.next[level];
@@ -75,7 +85,7 @@ public class SkipList {
 	 * Prints all levels of the SkipList.
 	 */
 	public void print() {
-		for(int i = MAX_LEVEL; i>=0; i--) {
+		for(int i = maxLevel; i>=0; i--) {
 			this.print(i);
 		}
 	}
@@ -85,7 +95,7 @@ public class SkipList {
 	 * @return A boolean representing whether or not the value was found: true if it was, false otherwise.
 	 */
 	public boolean find(int value) {
-		int currentLevel = MAX_LEVEL;
+		int currentLevel = maxLevel;
 		Node startingNode = head;
 		while(currentLevel>=0) {
 			Node search = startingNode.next[currentLevel];
@@ -102,14 +112,20 @@ public class SkipList {
 	}
 	/**
 	 * Insert a new value into the SkipList
-	 * The maximum level of the Node holding the value is random, between 0 and MAX_LEVEL (both inclusive)
-	 * Use java.util.Random (look this up if you don't know what this is!)
+	 * The maximum level of the Node holding the value is fixed, between 0 and maxLevel (both inclusive)
+	 * The nth node goes up to level i if n % 2**i == 0.
 	 * @param value The value to be inserted into the SkipList
 	 * @return A boolean representing whether or not insertion was successful: true if it was inserted successfully, false otherwise.
 	 */
 	public boolean insert(int value) {
-		Random r = new Random();
-		int insertLevel = r.nextInt(MAX_LEVEL+1);
+		if (numberOfNodes >= MAX_NODES) throw new AssertionError("Length of the SkipList cannot exceed MAX_NODES = "+ MAX_NODES);
+		int insertLevel = 0;
+		for (int i = maxLevel; i>=0; i--){
+			if (numberOfNodes % Math.pow(2,i)==0) {
+				insertLevel = i;
+				break;
+			}
+		}
 		if (insertLevel>maxListLevel) maxListLevel = insertLevel;
 		Node[] nodesToUpdate = new Node[insertLevel+1];
 		Node startingNode = head;
@@ -128,6 +144,7 @@ public class SkipList {
 			insert.next[i] = nodesToUpdate[i].next[i];
 			nodesToUpdate[i].next[i] = insert;
 		}
+		numberOfNodes++;
 		return true;
 	}
 	/**
@@ -138,9 +155,9 @@ public class SkipList {
 	 */
 	public boolean delete(int value) {
 		int newMaxLevel = 0;
-		Node[] nodesToUpdate = new Node[MAX_LEVEL+1];
+		Node[] nodesToUpdate = new Node[maxLevel +1];
 		Node startingNode = head;
-		for (int i = MAX_LEVEL; i>=0; i--) {
+		for (int i = maxLevel; i>=0; i--) {
 			Node search = startingNode.next[i];
 			visitedNodes++;
 			while(search != null && search.item < value) {
@@ -157,7 +174,11 @@ public class SkipList {
 			nodesToUpdate[i].next[i] = nodesToUpdate[i].next[i].next[i];
 			if (nodesToUpdate[i] != head || nodesToUpdate[i].next[i] != null) newMaxLevel = i;
 		}
-		this.maxListLevel = newMaxLevel;
+		if (found){
+			this.maxListLevel = newMaxLevel;
+			numberOfNodes--;
+		}
+
 		return found;
 	}
 	/**
