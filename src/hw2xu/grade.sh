@@ -1,11 +1,16 @@
+###############################################################################
+# Author: Max Shi
+# Date: 2/10/2020
+# Description: Grading scripts to automate testing of multiple files at once. Run once for startup instructions.
+# Dependencies: unzip, javac, java
+###############################################################################
 #!/bin/bash
-# Grading script written by Max Shi, 2/10/2020
-
 
 if [ ! -d "original" ] || [ ! -d "test" ] || [ ! -d "submissions" ]; then
     echo "original, submissions, and error directories will be created. Place original solution in original, and put test script java file in the same directory as this script."
     mkdir original > /dev/null
     mkdir submissions > /dev/null
+    mkdir error > /dev/null
     exit 1
 fi
 if [ ! -f *.java ]; then
