@@ -1,4 +1,4 @@
-package hw2xu;
+package original;
 import java.util.Random;
 /**
  * SkipList class for Assignment 2.

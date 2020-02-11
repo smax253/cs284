@@ -1,4 +1,4 @@
-package hw2xu;
+package original;
 import java.util.Random;
 
 /**
@@ -42,7 +42,7 @@ public class ListComparison {
 		System.out.println("\nComparing insert:");
 		long startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			skipList.insert(r.nextInt(250));
+			skipList.insert(r.nextInt());
 		}
 		long endTime = System.nanoTime();
 		System.out.printf("SkipList insert time: %.04f ms\n", (endTime-startTime)/1000000.0);
@@ -50,7 +50,7 @@ public class ListComparison {
 		skipList.resetVisitedNodes();
 		startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			SLL.insert(r.nextInt(250));
+			SLL.insert(r.nextInt());
 		}
 		endTime = System.nanoTime();
 		System.out.printf("SLL insert time: %.04f ms\n", (endTime-startTime)/1000000.0);
@@ -67,7 +67,7 @@ public class ListComparison {
 		System.out.println("\nComparing find:");
 		startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			skipList.find(r.nextInt(250));
+			skipList.find(r.nextInt());
 		}
 		endTime = System.nanoTime();
 		System.out.printf("SkipList find time: %.04f ms\n", (endTime-startTime)/1000000.0);
@@ -75,7 +75,7 @@ public class ListComparison {
 		skipList.resetVisitedNodes();
 		startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			SLL.find(r.nextInt(250));
+			SLL.find(r.nextInt());
 		}
 		endTime = System.nanoTime();
 		System.out.printf("SLL find time: %.04f ms\n", (endTime-startTime)/1000000.0);
@@ -86,7 +86,7 @@ public class ListComparison {
 		System.out.println("\nComparing Delete:");
 		startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			skipList.delete(r.nextInt(250));
+			skipList.delete(r.nextInt());
 		}
 		endTime = System.nanoTime();
 		System.out.printf("SkipList delete time: %.04f ms\n", (endTime-startTime)/1000000.0);
@@ -94,7 +94,7 @@ public class ListComparison {
 		skipList.resetVisitedNodes();
 		startTime = System.nanoTime();
 		for(int i = 0; i<100; i++) {
-			SLL.delete(r.nextInt(250));
+			SLL.delete(r.nextInt());
 		}
 		endTime = System.nanoTime();
 		System.out.printf("SLL delete time: %.04f ms\n", (endTime-startTime)/1000000.0);

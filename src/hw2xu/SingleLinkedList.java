@@ -1,4 +1,4 @@
-package hw2xu;
+package original;
 /**
  * Single Linked List Class for Assignment 2.<br>
  * This is Part 1 of the assignment, worth 20 points.
@@ -95,6 +95,7 @@ public class SingleLinkedList {
 		Node current = head.next;
 		visitedNodes++;
 		while(current != null && current.item != value) {
+			prev = current;
 			current = current.next;
 			visitedNodes++;
 		}
@@ -109,11 +110,7 @@ public class SingleLinkedList {
 	 */
 	public boolean find(int value) {
 		if (head == null) return false;
-		if (head.item == value) {
-			head = head.next;
-			return true;
-		}
-		Node current = head.next;
+		Node current = head;
 		visitedNodes++;
 		while(current != null && current.item != value) {
 			current = current.next;
@@ -133,5 +130,20 @@ public class SingleLinkedList {
 	 */
 	public void resetVisitedNodes() {
 		visitedNodes = 0;
+	}
+	public static void main(String[] args){
+		SingleLinkedList sll = new SingleLinkedList();
+		for(int i = 0; i<30; i++){
+			sll.insert(i);
+		}
+		for(int i = 0; i<10; i++){
+			if (!sll.find(i)) System.out.println("not found");
+		}
+		for(int i = 0; i<15; i++){
+			sll.delete(i);
+		}
+		sll.print();
+
+
 	}
 }
