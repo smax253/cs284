@@ -1,4 +1,4 @@
-package original;
+package hw2xu;
 /**
  * Single Linked List Class for Assignment 2.<br>
  * This is Part 1 of the assignment, worth 20 points.
